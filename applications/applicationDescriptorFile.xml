@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<applications xmlns="http://documentation.bonitasoft.com/application-xml-schema/1.0">
+    <application token="AgileTeam" version="1.0.0-SNAPSHOT" profile="User" homePage="listSprints" state="ACTIVATED" layout="custompage_defaultlayout" theme="custompage_bootstrapdefaulttheme">
+        <displayName>Agile Team App</displayName>
+        <applicationPages>
+            <applicationPage customPage="custompage_listSprints" token="listSprints"/>
+        </applicationPages>
+        <applicationMenus/>
+    </application>
+</applications>

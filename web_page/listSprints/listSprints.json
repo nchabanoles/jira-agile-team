@@ -1,0 +1,154 @@
+{
+  "designerVersion" : "1.8.8",
+  "id" : "listSprints",
+  "name" : "listSprints",
+  "lastUpdate" : 1533565940254,
+  "rows" : [ [ {
+    "type" : "component",
+    "dimension" : {
+      "xs" : 12,
+      "sm" : 12,
+      "md" : 12,
+      "lg" : 12
+    },
+    "propertyValues" : {
+      "cssClasses" : {
+        "type" : "constant",
+        "value" : ""
+      },
+      "hidden" : {
+        "type" : "constant",
+        "value" : false
+      },
+      "text" : {
+        "type" : "interpolation",
+        "value" : "+"
+      },
+      "type" : {
+        "type" : "constant",
+        "value" : "process"
+      },
+      "targetUrl" : {
+        "type" : "constant",
+        "value" : "http://"
+      },
+      "pageToken" : {
+        "type" : "constant"
+      },
+      "processName" : {
+        "type" : "constant",
+        "value" : "extractJiraData"
+      },
+      "processVersion" : {
+        "type" : "constant",
+        "value" : "1.0.0-SNAPSHOT"
+      },
+      "taskId" : {
+        "type" : "constant"
+      },
+      "caseId" : {
+        "type" : "constant"
+      },
+      "target" : {
+        "type" : "constant",
+        "value" : "_self"
+      },
+      "appToken" : {
+        "type" : "constant"
+      },
+      "urlParams" : {
+        "type" : "constant"
+      },
+      "alignment" : {
+        "type" : "constant",
+        "value" : "right"
+      },
+      "buttonStyle" : {
+        "type" : "constant",
+        "value" : "primary"
+      }
+    },
+    "reference" : "72ec53f5-f59c-40ff-9918-a7270b7dca17",
+    "id" : "pbLink"
+  } ], [ {
+    "type" : "component",
+    "dimension" : {
+      "xs" : 12,
+      "sm" : 12,
+      "md" : 12,
+      "lg" : 12
+    },
+    "propertyValues" : {
+      "cssClasses" : {
+        "type" : "constant",
+        "value" : ""
+      },
+      "hidden" : {
+        "type" : "constant",
+        "value" : false
+      },
+      "headers" : {
+        "type" : "constant",
+        "value" : [ "Name", "Start Date", "End Date", "Team Size", "Working Days", "Non Sprint Days", "Out Of Sprint Days", "#Stories Done", "#Storypoints for Stories", "Value Stories Done", "#DefectFixed", "#Tasks Done", "#Storypoints for Tasks" ]
+      },
+      "type" : {
+        "type" : "constant",
+        "value" : "Bonita API"
+      },
+      "apiUrl" : {
+        "type" : "constant",
+        "value" : "../API/bdm/businessData/com.company.model.Sprint?q=find"
+      },
+      "params" : {
+        "type" : "constant",
+        "value" : ""
+      },
+      "content" : {
+        "type" : "constant"
+      },
+      "columnsKey" : {
+        "type" : "constant",
+        "value" : [ "name", "startDate", "endDate", "teamSize", "workingDays", "nonSprintDays", "OOSDays", "nbStoriesDone", "nbStoryPoints4Stories", "valueStoriesDone", "nbDefectFixed", "nbTasksDone", "nbStoryPoints4Tasks" ]
+      },
+      "sortColumns" : {
+        "type" : "constant"
+      },
+      "selectedRow" : {
+        "type" : "variable",
+        "value" : ""
+      },
+      "pageSize" : {
+        "type" : "constant",
+        "value" : 26
+      },
+      "filter" : {
+        "type" : "constant"
+      }
+    },
+    "reference" : "ab19280c-0f05-40e5-ac40-2df877e4b091",
+    "id" : "pbDataTable"
+  } ] ],
+  "assets" : [ {
+    "id" : "32d2232d-1750-4532-b931-8cfad8c6963e",
+    "name" : "localization.json",
+    "type" : "json",
+    "order" : 0,
+    "external" : false
+  }, {
+    "id" : "101dfb4e-59e2-4b6e-80bf-5df2b0f3e398",
+    "name" : "style.css",
+    "type" : "css",
+    "order" : 0,
+    "external" : false
+  } ],
+  "inactiveAssets" : [ ],
+  "data" : {
+    "sprints" : {
+      "type" : "url",
+      "value" : "../API/bdm/businessData/com.company.model.Sprint?q=find&p=0&c=10000",
+      "exposed" : false
+    }
+  },
+  "uuid" : "ca475033-a0dd-4a1c-b759-622fb7f7810d",
+  "type" : "page"
+}
