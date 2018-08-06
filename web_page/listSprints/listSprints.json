@@ -2,7 +2,7 @@
   "designerVersion" : "1.8.8",
   "id" : "listSprints",
   "name" : "listSprints",
-  "lastUpdate" : 1533565940254,
+  "lastUpdate" : 1533568833738,
   "rows" : [ [ {
     "type" : "component",
     "dimension" : {
@@ -10,6 +10,85 @@
       "sm" : 12,
       "md" : 12,
       "lg" : 12
+    },
+    "propertyValues" : {
+      "cssClasses" : {
+        "type" : "constant",
+        "value" : ""
+      },
+      "hidden" : {
+        "type" : "constant",
+        "value" : false
+      },
+      "type" : {
+        "type" : "constant",
+        "value" : "Bar"
+      },
+      "data" : {
+        "type" : "expression",
+        "value" : "nbItemsPerSprint.values"
+      },
+      "labels" : {
+        "type" : "expression",
+        "value" : "nbItemsPerSprint.labels"
+      },
+      "setLabels" : {
+        "type" : "constant",
+        "value" : [ "Stories Done", "Tasks Done", "Defects Fixed" ]
+      },
+      "legendHidden" : {
+        "type" : "constant",
+        "value" : true
+      },
+      "colors" : {
+        "type" : "constant"
+      },
+      "options" : {
+        "type" : "constant",
+        "value" : ""
+      }
+    },
+    "reference" : "c135643c-aa4e-41b8-b8a3-112bb65c99dd",
+    "id" : "pbChart"
+  } ], [ {
+    "type" : "component",
+    "dimension" : {
+      "xs" : 12,
+      "sm" : 12,
+      "md" : 12,
+      "lg" : 12
+    },
+    "propertyValues" : {
+      "cssClasses" : {
+        "type" : "constant",
+        "value" : ""
+      },
+      "hidden" : {
+        "type" : "constant",
+        "value" : false
+      },
+      "text" : {
+        "type" : "interpolation",
+        "value" : "Jira issues by nature per sprint"
+      },
+      "level" : {
+        "type" : "constant",
+        "value" : "Level 2"
+      },
+      "alignment" : {
+        "type" : "constant",
+        "value" : "center"
+      }
+    },
+    "reference" : "a1d45b40-cac1-4de4-b5a1-a24f225739d3",
+    "id" : "pbTitle"
+  } ], [ {
+    "type" : "component",
+    "dimension" : {
+      "xs" : 12,
+      "sm" : 12,
+      "md" : 12,
+      "lg" : 6
     },
     "propertyValues" : {
       "cssClasses" : {
@@ -68,7 +147,7 @@
         "value" : "primary"
       }
     },
-    "reference" : "72ec53f5-f59c-40ff-9918-a7270b7dca17",
+    "reference" : "7987e3d9-a1c5-42d9-bc56-54c67fb3cc05",
     "id" : "pbLink"
   } ], [ {
     "type" : "component",
@@ -125,7 +204,7 @@
         "type" : "constant"
       }
     },
-    "reference" : "ab19280c-0f05-40e5-ac40-2df877e4b091",
+    "reference" : "89635284-9bb7-4a51-ad1e-7409bb4a40ca",
     "id" : "pbDataTable"
   } ] ],
   "assets" : [ {
@@ -146,6 +225,11 @@
     "sprints" : {
       "type" : "url",
       "value" : "../API/bdm/businessData/com.company.model.Sprint?q=find&p=0&c=10000",
+      "exposed" : false
+    },
+    "nbItemsPerSprint" : {
+      "type" : "expression",
+      "value" : "\nvar result = {\n    \"values\" : [[], [], []],\n    \"labels\": []\n    \n};\n\n$data.sprints.forEach(s => {\n    result.labels.push(s.name);\n    result.values[0].push(s.nbStoriesDone);\n    result.values[1].push(s.nbTasksDone);\n    result.values[2].push(s.nbDefectFixed);\n});\n\nreturn result\n",
       "exposed" : false
     }
   },
