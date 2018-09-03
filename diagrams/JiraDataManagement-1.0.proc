@@ -20,7 +20,9 @@
           <connectors xmi:type="process:Connector" xmi:id="_2aRPcJmOEeij-f9CHkDfyw" name="fetchJiraData" definitionId="rest-get" event="ON_ENTER" definitionVersion="1.0.0">
             <configuration xmi:type="connectorconfiguration:ConnectorConfiguration" xmi:id="_2aRPcZmOEeij-f9CHkDfyw" definitionId="rest-get" version="1.0.0" modelVersion="7.8.0-001">
               <parameters xmi:type="connectorconfiguration:ConnectorParameter" xmi:id="_2aR2gJmOEeij-f9CHkDfyw" key="url">
-                <expression xmi:type="expression:Expression" xmi:id="_2aR2gZmOEeij-f9CHkDfyw" name="buildURL()" content="return &quot;https://bonitasoft.atlassian.net/rest/api/2/search?jql=project%20%3D%20BS%20and%20resolutiondate%3E%3D2018-02-26%20and%20resolutiondate%3C2018-03-12%20%20ORDER%20BY%20created%20DESC&amp;fields=issueType,storyPoints,value&amp;startAt=0&amp;maxResults=200&quot;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnTypeFixed="true"/>
+                <expression xmi:type="expression:Expression" xmi:id="_2aR2gZmOEeij-f9CHkDfyw" name="buildURL()" content="String from = sprintToCreate.startDate.toString() //e.g. 2018-02-26&#xA;String to = sprintToCreate.endDate.toString() //e.g. 2018-03-12&#xA;String storyPoints = &quot;customfield_10004&quot;;&#xA;String value = &quot;customfield_14600&quot;;&#xA;return &quot;https://bonitasoft.atlassian.net/rest/api/2/search?jql=project%20%3D%20BS%20and%20resolutiondate%3E%3D&quot;+ from  +&quot;%20and%20resolutiondate%3C&quot; + to + &quot;%20and%20resolution%20%3D%20Fixed%20ORDER%20BY%20created%20DESC&amp;fields=issuetype,&quot; + storyPoints + &quot;,&quot; + value + &quot;&amp;startAt=0&amp;maxResults=500&quot;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnTypeFixed="true">
+                  <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_xdH4oK-KEeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+                </expression>
               </parameters>
               <parameters xmi:type="connectorconfiguration:ConnectorParameter" xmi:id="_2aR2gpmOEeij-f9CHkDfyw" key="urlCookies">
                 <expression xmi:type="expression:TableExpression" xmi:id="_2aR2g5mOEeij-f9CHkDfyw"/>
@@ -96,26 +98,101 @@
               <leftOperand xmi:type="expression:Expression" xmi:id="_2aR2sZmOEeij-f9CHkDfyw" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
                 <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_2aR2spmOEeij-f9CHkDfyw" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
               </leftOperand>
-              <rightOperand xmi:type="expression:Expression" xmi:id="_2aR2s5mOEeij-f9CHkDfyw" name="extractNbStories()" content="bodyAsObject.issues.count {&quot;New Story&quot;.equals(it.issueType.name)};&#xA;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9EJmTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9EZmTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9EpmTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9E5mTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9FJmTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9FZmTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9FpmTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
-                <referencedElements xmi:type="definition:Output" xmi:id="_C3m9F5mTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_2aR2s5mOEeij-f9CHkDfyw" name="extractNbStories()" content="import java.util.logging.Logger&#xA;&#xA;Logger logger = Logger.getLogger(&quot;org.bonitasoft.connectors&quot;);&#xA;logger.fine(&quot;JIRA responded with: \n&quot; +bodyAsString);&#xA;&#xA;bodyAsObject.issues.count {&quot;New story&quot;.equalsIgnoreCase(it.fields.issuetype.name) || &quot;Improvement&quot;.equalsIgnoreCase(it.fields.issuetype.name)};&#xA;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_8qGoEa-CEeifGbsYeKzW3w" name="bodyAsString" type="java.lang.String"/>
+                <referencedElements xmi:type="definition:Output" xmi:id="_q88F8K-GEeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
               </rightOperand>
               <operator xmi:type="expression:Operator" xmi:id="_2aR2vJmOEeij-f9CHkDfyw" type="JAVA_METHOD" expression="setNbStoriesDone">
                 <inputTypes>java.lang.Integer</inputTypes>
               </operator>
             </outputs>
             <outputs xmi:type="expression:Operation" xmi:id="_C3m9GJmTEeij-f9CHkDfyw">
-              <leftOperand xmi:type="expression:Expression" xmi:id="_C3m9GZmTEeij-f9CHkDfyw" content=""/>
-              <rightOperand xmi:type="expression:Expression" xmi:id="_C3m9GpmTEeij-f9CHkDfyw" name="bodyAsObject" content="bodyAsObject" type="CONNECTOR_OUTPUT_TYPE" returnType="java.lang.Object">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_C3m9GZmTEeij-f9CHkDfyw" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_EcubYK95EeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_C3m9GpmTEeij-f9CHkDfyw" name="countTasks()" content="bodyAsObject.issues.count {&quot;Task&quot;.equalsIgnoreCase(it.fields.issuetype.name)};" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
                 <referencedElements xmi:type="definition:Output" xmi:id="_C3m9G5mTEeij-f9CHkDfyw" name="bodyAsObject" type="java.lang.Object"/>
               </rightOperand>
-              <operator xmi:type="expression:Operator" xmi:id="_C3m9HJmTEeij-f9CHkDfyw" type="ASSIGNMENT"/>
+              <operator xmi:type="expression:Operator" xmi:id="_C3m9HJmTEeij-f9CHkDfyw" type="JAVA_METHOD" expression="setNbTasksDone">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
+            </outputs>
+            <outputs xmi:type="expression:Operation" xmi:id="_EcvpgK95EeifGbsYeKzW3w">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_Ecvpga95EeifGbsYeKzW3w" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_Ecvpgq95EeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_Ecvpg695EeifGbsYeKzW3w" name="countDefects()" content="bodyAsObject.issues.count {&quot;Defect&quot;.equalsIgnoreCase(it.fields.issuetype.name)};" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_EcvphK95EeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
+              </rightOperand>
+              <operator xmi:type="expression:Operator" xmi:id="_Ecvpha95EeifGbsYeKzW3w" type="JAVA_METHOD" expression="setNbDefectFixed">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
+            </outputs>
+            <outputs xmi:type="expression:Operation" xmi:id="_smlqsK-OEeifGbsYeKzW3w">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_smm40K-OEeifGbsYeKzW3w" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_smm40a-OEeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_smm40q-OEeifGbsYeKzW3w" name="computeStoryPoints4Stories()" content="int result = 0;&#xA;String storyPoints = &quot;customfield_10004&quot;;&#xA;bodyAsObject.issues.each({&#xA;&#x9;if(&quot;New story&quot;.equalsIgnoreCase(it.fields.issuetype.name) || &quot;Improvement&quot;.equalsIgnoreCase(it.fields.issuetype.name)) {&#xA;&#x9;&#x9;result+=it.fields[storyPoints]&#xA;&#x9;}&#xA;});&#xA;return result;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_smm406-OEeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
+              </rightOperand>
+              <operator xmi:type="expression:Operator" xmi:id="_smm41K-OEeifGbsYeKzW3w" type="JAVA_METHOD" expression="setNbStoryPoints4Stories">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
+            </outputs>
+            <outputs xmi:type="expression:Operation" xmi:id="_nlbzEK-QEeifGbsYeKzW3w">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_nlbzEa-QEeifGbsYeKzW3w" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_nlbzEq-QEeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_nlbzE6-QEeifGbsYeKzW3w" name="computeStoryPoints4Tasks()" content="int result = 0;&#xA;String storyPoints = &quot;customfield_10004&quot;;&#xA;bodyAsObject.issues.each({&#xA;&#x9;if(&quot;Task&quot;.equalsIgnoreCase(it.fields.issuetype.name)) {&#xA;&#x9;&#x9;result+=it.fields[storyPoints]&#xA;&#x9;}&#xA;});&#xA;return result;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_nlbzFK-QEeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
+              </rightOperand>
+              <operator xmi:type="expression:Operator" xmi:id="_nlbzFa-QEeifGbsYeKzW3w" type="JAVA_METHOD" expression="setNbStoryPoints4Tasks">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
+            </outputs>
+            <outputs xmi:type="expression:Operation" xmi:id="_nlbzFq-QEeifGbsYeKzW3w">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_nlbzF6-QEeifGbsYeKzW3w" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_nlbzGK-QEeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_nlbzGa-QEeifGbsYeKzW3w" name="computeValueStoriesImprovementDone()" content="int result = 0;&#xA;String value = &quot;customfield_14600&quot;;&#xA;bodyAsObject.issues.each({&#xA;&#x9;if(&quot;New story&quot;.equalsIgnoreCase(it.fields.issuetype.name) || &quot;Improvement&quot;.equalsIgnoreCase(it.fields.issuetype.name)) {&#xA;&#x9;&#x9;result+=it.fields[value]&#xA;&#x9;}&#xA;});&#xA;return result;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_nlcaIK-QEeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
+              </rightOperand>
+              <operator xmi:type="expression:Operator" xmi:id="_nlcaIa-QEeifGbsYeKzW3w" type="JAVA_METHOD" expression="setValueStoriesDone">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
+            </outputs>
+            <outputs xmi:type="expression:Operation" xmi:id="_PTf8YK-UEeifGbsYeKzW3w">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_PTf8Ya-UEeifGbsYeKzW3w" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_PTf8Yq-UEeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_PTf8Y6-UEeifGbsYeKzW3w" name="countNbBugsFixed()" content="return bodyAsObject.issues.count {&quot;Bug&quot;.equalsIgnoreCase(it.fields.issuetype.name)};&#xA;" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_PTf8ZK-UEeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
+              </rightOperand>
+              <operator xmi:type="expression:Operator" xmi:id="_PTf8Za-UEeifGbsYeKzW3w" type="JAVA_METHOD" expression="setNbBugsFixed">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
+            </outputs>
+            <outputs xmi:type="expression:Operation" xmi:id="_PTiYoK-UEeifGbsYeKzW3w">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_PTiYoa-UEeifGbsYeKzW3w" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_PTiYoq-UEeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_PTiYo6-UEeifGbsYeKzW3w" name="countNbPatchesDelivered()" content="bodyAsObject.issues.count {&quot;Patch&quot;.equalsIgnoreCase(it.fields.issuetype.name)};" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_PTiYpK-UEeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
+              </rightOperand>
+              <operator xmi:type="expression:Operator" xmi:id="_PTiYpa-UEeifGbsYeKzW3w" type="JAVA_METHOD" expression="setNbPatchesDelivered">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
+            </outputs>
+            <outputs xmi:type="expression:Operation" xmi:id="_4Z21sK-UEeifGbsYeKzW3w">
+              <leftOperand xmi:type="expression:Expression" xmi:id="_4Z21sa-UEeifGbsYeKzW3w" name="sprintToCreate" content="sprintToCreate" type="TYPE_VARIABLE" returnType="com.company.model.Sprint">
+                <referencedElements xmi:type="process:BusinessObjectData" xmi:id="_4Z21sq-UEeifGbsYeKzW3w" name="sprintToCreate" dataType="_s91sFJl7Eeij-f9CHkDfyw" className="com.company.model.Sprint"/>
+              </leftOperand>
+              <rightOperand xmi:type="expression:Expression" xmi:id="_4Z21s6-UEeifGbsYeKzW3w" name="countTRFixed()" content="bodyAsObject.issues.count {&quot;Technical requirement&quot;.equalsIgnoreCase(it.fields.issuetype.name)};" interpreter="GROOVY" type="TYPE_READ_ONLY_SCRIPT" returnType="java.lang.Integer">
+                <referencedElements xmi:type="definition:Output" xmi:id="_4Z21tK-UEeifGbsYeKzW3w" name="bodyAsObject" type="java.lang.Object"/>
+              </rightOperand>
+              <operator xmi:type="expression:Operator" xmi:id="_4Z21ta-UEeifGbsYeKzW3w" type="JAVA_METHOD" expression="setNbTRFixed">
+                <inputTypes>java.lang.Integer</inputTypes>
+              </operator>
             </outputs>
           </connectors>
           <loopCondition xmi:type="expression:Expression" xmi:id="_CDX3AJmDEeij-f9CHkDfyw" name="" content="" returnType="java.lang.Boolean" returnTypeFixed="true"/>
@@ -131,7 +208,7 @@
         </defaultValue>
       </data>
       <formMapping xmi:type="process:FormMapping" xmi:id="_s91r9Jl7Eeij-f9CHkDfyw">
-        <targetForm xmi:type="expression:Expression" xmi:id="_vFJmkJmPEeij-f9CHkDfyw" name="" content="" type="FORM_REFERENCE_TYPE" returnTypeFixed="true"/>
+        <targetForm xmi:type="expression:Expression" xmi:id="_oadCcK-DEeifGbsYeKzW3w" name="createSprint" content="e0a629fc-b5f6-4939-89bd-d28cdfdac1ff" type="FORM_REFERENCE_TYPE" returnTypeFixed="true"/>
       </formMapping>
       <overviewFormMapping xmi:type="process:FormMapping" xmi:id="_s91r9pl7Eeij-f9CHkDfyw">
         <targetForm xmi:type="expression:Expression" xmi:id="_s91r95l7Eeij-f9CHkDfyw" name="" content="" type="FORM_REFERENCE_TYPE" returnTypeFixed="true"/>

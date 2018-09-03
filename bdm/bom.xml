@@ -17,6 +17,17 @@
                 <field type="INTEGER" length="255" name="nbDefectFixed" nullable="true" collection="false"/>
                 <field type="INTEGER" length="255" name="nbTasksDone" nullable="true" collection="false"/>
                 <field type="INTEGER" length="255" name="nbStoryPoints4Tasks" nullable="true" collection="false"/>
+                <field type="INTEGER" length="255" name="nbBugsFixed" nullable="true" collection="false"/>
+                <field type="INTEGER" length="255" name="nbTRFixed" nullable="true" collection="false"/>
+                <field type="INTEGER" length="255" name="nbPatchesDelivered" nullable="true" collection="false"/>
+            </fields>
+            <uniqueConstraints/>
+            <queries/>
+            <indexes/>
+        </businessObject>
+        <businessObject qualifiedName="com.company.model.Version">
+            <fields>
+                <field type="STRING" length="255" name="name" nullable="false" collection="false"/>
             </fields>
             <uniqueConstraints/>
             <queries/>

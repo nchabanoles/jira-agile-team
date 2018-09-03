@@ -2,7 +2,7 @@
   "designerVersion" : "1.8.8",
   "id" : "listSprints",
   "name" : "listSprints",
-  "lastUpdate" : 1533568833738,
+  "lastUpdate" : 1535991586631,
   "rows" : [ [ {
     "type" : "component",
     "dimension" : {
@@ -168,7 +168,7 @@
       },
       "headers" : {
         "type" : "constant",
-        "value" : [ "Name", "Start Date", "End Date", "Team Size", "Working Days", "Non Sprint Days", "Out Of Sprint Days", "#Stories Done", "#Storypoints for Stories", "Value Stories Done", "#DefectFixed", "#Tasks Done", "#Storypoints for Tasks" ]
+        "value" : [ "Name", "Start Date", "End Date", "Team Size", "Working Days", "Non Sprint Days", "Out Of Sprint Days", "#Stories Done", "#Storypoints for Stories", "Value Stories Done", "#DefectFixed", "#Tasks Done", "#Storypoints for Tasks", "#Bugs Fixed", "#Patches Delivered", "#TR Fixed" ]
       },
       "type" : {
         "type" : "constant",
@@ -187,7 +187,7 @@
       },
       "columnsKey" : {
         "type" : "constant",
-        "value" : [ "name", "startDate", "endDate", "teamSize", "workingDays", "nonSprintDays", "OOSDays", "nbStoriesDone", "nbStoryPoints4Stories", "valueStoriesDone", "nbDefectFixed", "nbTasksDone", "nbStoryPoints4Tasks" ]
+        "value" : [ "name", "startDate", "endDate", "teamSize", "workingDays", "nonSprintDays", "OOSDays", "nbStoriesDone", "nbStoryPoints4Stories", "valueStoriesDone", "nbDefectFixed", "nbTasksDone", "nbStoryPoints4Tasks", "nbBugsFixed", "nbPatchesDelivered", "nbTRFixed" ]
       },
       "sortColumns" : {
         "type" : "constant"
